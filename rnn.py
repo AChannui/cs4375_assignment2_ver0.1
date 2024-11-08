@@ -31,12 +31,16 @@ class RNN(nn.Module):
 
     def forward(self, inputs):
         # [to fill] obtain hidden layer representation (https://pytorch.org/docs/stable/generated/torch.nn.RNN.html)
-        _, hidden = 
-        # [to fill] obtain output layer representations
+        h0 = torch.zeros(self.numOfLayer, inputs.size(1), self.h).to(inputs.device)
 
-        # [to fill] sum over output 
+        # [to fill] obtain output layer representations
+        predicted_label, hn = self.rnn(inputs, h0)
+
+        # [to fill] sum over output
+        predicted_vector = self.W(predicted_label[:, -1, :])
 
         # [to fill] obtain probability dist.
+        predicted_vector = self.softmax(predicted_vector)
 
         return predicted_vector
 
@@ -80,7 +84,7 @@ if __name__ == "__main__":
     model = RNN(50, args.hidden_dim)  # Fill in parameters
     # optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9)
     optimizer = optim.Adam(model.parameters(), lr=0.01)
-    word_embedding = pickle.load(open('./word_embedding.pkl', 'rb'))
+    word_embedding = pickle.load(open('./Data_Embedding/word_embedding.pkl', 'rb'))
 
     stopping_condition = False
     epoch = 0
